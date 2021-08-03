@@ -13,6 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Taste.DataAccess;
+using Taste.DataAccess.Data.Repository.IRepository;
+using Taste.DataAccess.Data.Repository;
+using Newtonsoft.Json.Serialization;
 
 namespace Taste
 {
@@ -34,6 +37,9 @@ namespace Taste
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
+
+            services.AddRazorPages();
             services.AddMvc(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
