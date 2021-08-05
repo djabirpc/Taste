@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Taste.DataAccess.Data.Repository.IRepository;
 using Taste.Models;
+using Taste.Utility;
 
 namespace Taste.Controllers
 {

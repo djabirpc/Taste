@@ -16,6 +16,8 @@ using Taste.DataAccess;
 using Taste.DataAccess.Data.Repository.IRepository;
 using Taste.DataAccess.Data.Repository;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Taste.Utility;
 
 namespace Taste
 {
@@ -34,10 +36,25 @@ namespace Taste
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser,IdentityRole>()
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddSingleton<IEmailSender, EmailSender>();
+
             services.AddScoped<IUnitOfWork,UnitOfWork>();
+
+            services.ConfigureApplicationCookie(options =>
+
+            {
+
+                options.LoginPath = $"/Identity/Account/Login";
+
+                options.LogoutPath = $"/Identity/Account/Logout";
+
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+
+            });
 
             services.AddRazorPages();
             services.AddMvc(options => options.EnableEndpointRouting = false)
