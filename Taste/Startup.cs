@@ -44,6 +44,14 @@ namespace Taste
 
             services.AddScoped<IUnitOfWork,UnitOfWork>();
 
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.ConfigureApplicationCookie(options =>
 
             {
@@ -81,6 +89,8 @@ namespace Taste
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();
