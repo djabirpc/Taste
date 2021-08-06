@@ -18,6 +18,7 @@ using Taste.DataAccess.Data.Repository;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Taste.Utility;
+using Stripe;
 
 namespace Taste
 {
@@ -64,6 +65,9 @@ namespace Taste
 
             });
 
+
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+
             services.AddRazorPages();
             services.AddMvc(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
@@ -96,6 +100,8 @@ namespace Taste
             app.UseAuthorization();
 
             app.UseMvc();
+
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
         }
     }
 }
