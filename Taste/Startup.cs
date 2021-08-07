@@ -19,6 +19,7 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Taste.Utility;
 using Stripe;
+using Taste.DataAccess.Data.Initialzer;
 
 namespace Taste
 {
@@ -44,7 +45,7 @@ namespace Taste
             services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddScoped<IUnitOfWork,UnitOfWork>();
-
+            services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddSession(options =>
             {
@@ -77,7 +78,8 @@ namespace Taste
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -96,10 +98,21 @@ namespace Taste
 
             app.UseSession();
 
+            dbInitializer.Initialize();
+
+
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMvc();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
+
+            //app.UseMvc();
 
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
         }

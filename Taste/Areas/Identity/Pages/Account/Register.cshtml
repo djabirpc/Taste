@@ -5,15 +5,25 @@
     ViewData["Title"] = "Register";
 }
 
-<form method="post" autocomplete="off"  asp-route-returnUrl="@Model.ReturnUrl">
+<form method="post" autocomplete="off" asp-route-returnUrl="@Model.ReturnUrl">
     <div class="py-4 my-4">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row form-group">
             <div class="col-8 offset-2">
                 <div class="card">
-                    
+
                     <div class="card-body px-lg-5 pt-4">
-                        <h3 class="col-12 text-success text-center  py-4"><strong>Sign Up</strong></h3>
+                        <h3 class="col-12 text-success text-center  py-4">
+                            @if (User.IsInRole(SD.ManagerRole))
+                            {
+                                <strong>Register an Employee</strong>
+
+                            }
+                            else
+                            {
+                                <strong>Sign Up</strong>
+                            }
+                        </h3>
                         <hr />
                         <div class="form-row py-2">
                             <div class="col">
@@ -47,15 +57,17 @@
                             <input type="password" asp-for="Input.ConfirmPassword" autocomplete="off" placeholder="Confirm Password" class="form-control" />
                             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
+                        @if (User.IsInRole(SD.ManagerRole))
+                        {
 
+                            <div class="py-2">
+                                <input type="radio" name="rdUserRole" value="@SD.KitchenRole" /> @SD.KitchenRole
+                                <input type="radio" name="rdUserRole" value="@SD.FrontDeskRole" /> @SD.FrontDeskRole
+                                <input type="radio" name="rdUserRole" value="@SD.ManagerRole" /> @SD.ManagerRole
+                            </div>
+                        }
                         <div class="py-2">
-                            <input type="radio" name="rdUserRole" value="@SD.KitchenRole" /> @SD.KitchenRole
-                            <input type="radio" name="rdUserRole" value="@SD.FrontDeskRole" /> @SD.FrontDeskRole
-                            <input type="radio" name="rdUserRole" value="@SD.ManagerRole" /> @SD.ManagerRole
-                            <input type="radio" name="rdUserRole" value="@SD.CustomerRole" /> @SD.CustomerRole
-                        </div>
-                        <div class="py-2">
-                            <button type="submit" class="btn btn-success form-control">Register</button> 
+                            <button type="submit" class="btn btn-success form-control">Register</button>
                         </div>
                         <hr />
                         <p>
@@ -63,9 +75,9 @@
                         </p>
 
                     </div>
+                </div>
             </div>
         </div>
-    </div>
 </form>
 
 

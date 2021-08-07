@@ -25,7 +25,8 @@ namespace Taste.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            return new JsonResult(new { data = _unitOfWork.Category.GetAll() });
+            //return new JsonResult(new { data = _unitOfWork.Category.GetAll() });
+            return new JsonResult(new { data = _unitOfWork.SP_Call.ReturnList<Category>("usp_GetAllCategory",null) });
         }
 
         [HttpDelete("{id}")]

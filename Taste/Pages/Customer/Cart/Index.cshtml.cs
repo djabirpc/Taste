@@ -29,13 +29,17 @@ namespace Taste.Pages.Customer.Cart
         {
             OrderDetailsCartVM = new OrderDetailsCart()
             {
-                OrderHeader = new Models.OrderHeader()
+                OrderHeader = new Models.OrderHeader(),
+                listCart=new List<ShoppingCart>()
             };
 
             OrderDetailsCartVM.OrderHeader.OrderTotal = 0;
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if(claim != null)
+            {
 
             IEnumerable<ShoppingCart> cart = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == claim.Value);
 
@@ -49,6 +53,8 @@ namespace Taste.Pages.Customer.Cart
                 cartList.MenuItem = _unitOfWork.MenuItem.GetFirstOrDefault(m => m.Id == cartList.MenuItemId);
                 OrderDetailsCartVM.OrderHeader.OrderTotal += (cartList.MenuItem.Price * cartList.Count);
             }
+            }
+
         }
     
         public IActionResult OnPostPlus(int cartId)
